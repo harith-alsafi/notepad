@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "154371019608",
+    "project_id": "notepad-flutter-app",
+    "storage_bucket": "notepad-flutter-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154371019608:android:2de8140170bc801c560b2d",
+        "android_client_info": {
+          "package_name": "alsafi.harith.notepad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154371019608-7vqml70lm4srjg21sdqud3fkbe9b088s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQjB78Yayn9m4w_-8gq6cVNy21ozzYuX0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "154371019608-7vqml70lm4srjg21sdqud3fkbe9b088s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
