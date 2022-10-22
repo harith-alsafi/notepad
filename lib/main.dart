@@ -3,14 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:notepad/debug_print.dart';
-import 'labeled_check_box.dart';
 import 'firebase_options.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     title: 'NotePad',
-    theme: ThemeData.dark(),
+    theme: ThemeData.light(),
     home: const HomePage(),
   ));
 }
@@ -28,14 +27,13 @@ class _HomePageState extends State<HomePage> {
   // late means we will assign a value later
   late final TextEditingController _email;
   late final TextEditingController _password;
-  bool _passwordVisible = false;
+  bool _passwordHidden = true;
   late final Future<FirebaseApp> _initFireBase;
 
   /// Initialise late variables
   @override
   void initState() {
     _initFireBase = initFireBase();
-    _passwordVisible = false;
     _email = TextEditingController();
     _password = TextEditingController();
     super.initState();
@@ -92,7 +90,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         controller: _password,
-                        obscureText: _passwordVisible,
+                        obscureText: _passwordHidden,
                         enableSuggestions: false,
                         autocorrect: false,
                         decoration: InputDecoration(
@@ -101,14 +99,14 @@ class _HomePageState extends State<HomePage> {
                           hintText: "Enter password",
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _passwordVisible
+                              _passwordHidden
                                   ? Icons.visibility_off
                                   : Icons.visibility,
                               color: Theme.of(context).primaryColorDark,
                             ),
                             onPressed: () {
                               setState(() {
-                                _passwordVisible = !_passwordVisible;
+                                _passwordHidden = !_passwordHidden;
                               });
                             },
                             tooltip: "Hide/Show Password",
