@@ -28,11 +28,14 @@ class _HomePageState extends State<HomePage> {
   // late means we will assign a value later
   late final TextEditingController _email;
   late final TextEditingController _password;
-  bool _showPassword = false;
+  bool _passwordVisible = false;
+  late final Future<FirebaseApp> _initFireBase;
 
   /// Initialise late variables
   @override
   void initState() {
+    _initFireBase = initFireBase();
+    _passwordVisible = false;
     _email = TextEditingController();
     _password = TextEditingController();
     super.initState();
@@ -65,7 +68,7 @@ class _HomePageState extends State<HomePage> {
           title: const Text("Register"), // Text is a stateless widget
         ),
         body: FutureBuilder(
-          future: initFireBase(),
+          future: _initFireBase,
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
@@ -81,6 +84,7 @@ class _HomePageState extends State<HomePage> {
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           label: Text("Email"),
+                          hintText: "Enter email",
                         ),
                       ),
                     ),
@@ -88,12 +92,27 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         controller: _password,
-                        obscureText: !_showPassword,
+                        obscureText: _passwordVisible,
                         enableSuggestions: false,
                         autocorrect: false,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          label: Text("Password"),
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          label: const Text("Password"),
+                          hintText: "Enter password",
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _passwordVisible
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            },
+                            tooltip: "Hide/Show Password",
+                          ),
                         ),
                       ),
                     ),
