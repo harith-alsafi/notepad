@@ -1,16 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:notepad/debug_print.dart';
 import 'labeled_check_box.dart';
 import 'firebase_options.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
-    title: 'Flutter Demo',
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
+    title: 'NotePad',
+    theme: ThemeData.dark(),
     home: const HomePage(),
   ));
 }
@@ -30,12 +30,6 @@ class _HomePageState extends State<HomePage> {
   late final TextEditingController _password;
   bool _showPassword = false;
 
-  void toggleShowPassword() {
-    setState(() {
-      _showPassword = !_showPassword;
-    });
-  }
-
   /// Initialise late variables
   @override
   void initState() {
@@ -52,63 +46,77 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  Future<FirebaseApp> initFireBase() async {
+    if (kDebugMode) {
+      await Future.delayed(const Duration(seconds: 2)); //recommend
+      Logger.red.log("Debug: finished loading _HomePageState.initFireBase()");
+    }
+    return Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // scatfold is a stateful widget
-      appBar: AppBar(
-        // appBar is a statefull widget
-        title: const Text("Register"), // Text is a stateless widget
-      ),
-      body: Column(
-        children: [
-          TextField(
-            controller: _email,
-            enableSuggestions: false,
-            autocorrect: false,
-            keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: "Enter your email here",
-            ),
-          ),
-          TextField(
-            controller: _password,
-            obscureText: !_showPassword,
-            enableSuggestions: false,
-            autocorrect: false,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: "Enter your password here",
-            ),
-          ),
-          LabeledCheckbox(
-            label: "Show password",
-            value: _showPassword,
-            onChanged: (value) => {
-              setState(() {
-                _showPassword = value ?? false;
-              })
-            },
-          ),
-          OutlinedButton(
-            onPressed: () async {
-              await Firebase.initializeApp(
-                options: DefaultFirebaseOptions.currentPlatform,
-              );
-              final email = _email.text;
-              final password = _password.text;
-              final userCredential =
-                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                email: email,
-                password: password,
-              );
-              debugPrint("Successfully registered user: $userCredential");
-            },
-            child: const Text("Register"),
-          ),
-        ],
-      ),
-    );
+        // scatfold is a stateful widget
+        appBar: AppBar(
+          // appBar is a statefull widget
+          title: const Text("Register"), // Text is a stateless widget
+        ),
+        body: FutureBuilder(
+          future: initFireBase(),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: _email,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          label: Text("Email"),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: _password,
+                        obscureText: !_showPassword,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          label: Text("Password"),
+                        ),
+                      ),
+                    ),
+                    OutlinedButton(
+                      onPressed: () async {
+                        final email = _email.text;
+                        final password = _password.text;
+                        final userCredential = await FirebaseAuth.instance
+                            .createUserWithEmailAndPassword(
+                          email: email,
+                          password: password,
+                        );
+                        Logger.green.log(
+                            "Successfully registered user: $userCredential");
+                      },
+                      child: const Text("Register"),
+                    ),
+                  ],
+                );
+              default:
+                return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ));
   }
 }
