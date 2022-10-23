@@ -51,14 +51,12 @@ class _EntryViewState extends State<EntryView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   late final TextEditingController _name;
-  late final Future<FirebaseApp> _initFireBase;
   bool _rememberMe = false;
   bool _passwordHidden = true;
 
   /// Initialise late variables
   @override
   void initState() {
-    _initFireBase = initFireBase();
     _email = TextEditingController();
     _password = TextEditingController();
     _name = TextEditingController();
@@ -72,16 +70,6 @@ class _EntryViewState extends State<EntryView> {
     _password.dispose();
     _name.dispose();
     super.dispose();
-  }
-
-  Future<FirebaseApp> initFireBase() async {
-    if (kDebugMode) {
-      await Future.delayed(const Duration(seconds: 2)); //recommend
-      Logger.cyan.log("Debug: finished loading _HomePageState.initFireBase()");
-    }
-    return Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
   }
 
   Widget _buildTF(String text, TextEditingController? controller, TFKind kind) {
@@ -324,6 +312,8 @@ class _EntryViewState extends State<EntryView> {
     );
   }
 
+
+
   Widget _mainBuilder() {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
@@ -393,16 +383,7 @@ class _EntryViewState extends State<EntryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-          future: _initFireBase,
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                return _mainBuilder();
-              default:
-                return const Center(child: CircularProgressIndicator());
-            }
-          }),
+      body: _mainBuilder(),
     );
   }
 }
