@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../firebase_options.dart';
-import '../utilities/constants.dart';
+import 'constant_templates.dart';
 import '../utilities/debug_print.dart';
 
 class EntryView extends StatefulWidget {
@@ -128,7 +128,7 @@ class _EntryViewState extends State<EntryView> {
                         _passwordHidden
                             ? Icons.visibility_off
                             : Icons.visibility,
-                        color: Theme.of(context).primaryColorDark,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         setState(() {
@@ -208,15 +208,13 @@ class _EntryViewState extends State<EntryView> {
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: ElevatedButton(
-          // elevation: 5.0,
+          style: const ButtonStyle(
+              backgroundColor:
+                  MaterialStatePropertyAll(Color.fromARGB(255, 152, 202, 255))),
           onPressed: () async {
             await widget.loginButtonAction(context, _email.text, _password.text,
                 name: _name.text);
           },
-          // shape: RoundedRectangleBorder(
-          //   borderRadius: BorderRadius.circular(30.0),
-          // ),
-          // color: Colors.white,
           child: Text(
             widget.loginButtonText,
             style: const TextStyle(

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notepad/views/entry_view.dart';
+import 'package:notepad/views/login_view.dart';
 import '../utilities/debug_print.dart';
 
 class RegisterView extends StatefulWidget {
@@ -35,7 +36,9 @@ class _RegisterViewState extends State<RegisterView> {
           Logger.red.log("Error occured: $e");
         }
       },
-      fotterAction: (context) {},
+      fotterAction: (context) {
+        Navigator.pop(context);
+      },
       facebookAction: (context) {},
       googleAction: (context) {},
     );

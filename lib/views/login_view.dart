@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:notepad/views/register_view.dart';
 import '../utilities/debug_print.dart';
 import 'entry_view.dart';
 
@@ -37,7 +38,12 @@ class _LoginViewState extends State<LoginView> {
           Logger.red.log("Error occured: $e");
         }
       },
-      fotterAction: (context) {},
+      fotterAction: (context) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const RegisterView()),
+        );
+      },
       facebookAction: (context) {},
       googleAction: (context) {},
     );
