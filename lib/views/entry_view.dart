@@ -1,10 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../firebase_options.dart';
-import 'constant_templates.dart';
-import '../utilities/debug_print.dart';
+import '../themes/decorations.dart';
 
 class EntryView extends StatefulWidget {
   final String title;
@@ -78,12 +74,12 @@ class _EntryViewState extends State<EntryView> {
       children: <Widget>[
         Text(
           text,
-          style: kLabelStyle,
+          style: EntryViewStyles.kLabelStyle,
         ),
         const SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
+          decoration: EntryViewStyles.kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
             obscureText: kind == TFKind.password ? _passwordHidden : false,
@@ -109,7 +105,7 @@ class _EntryViewState extends State<EntryView> {
                 color: Colors.white,
               ),
               hintText: "Enter your $text",
-              hintStyle: kHintTextStyle,
+              hintStyle: EntryViewStyles.kHintTextStyle,
               suffixIcon: kind == TFKind.password
                   ? IconButton(
                       icon: Icon(
@@ -154,7 +150,7 @@ class _EntryViewState extends State<EntryView> {
           onPressed: () => widget.forgetPasswordAction!(context),
           child: const Text(
             'Forgot Password?',
-            style: kLabelStyle,
+            style: EntryViewStyles.kLabelStyle,
           ),
         ),
       ),
@@ -175,14 +171,14 @@ class _EntryViewState extends State<EntryView> {
               onChanged: (value) {
                 setState(() {
                   _rememberMe = value!;
-                  widget.rememberMeAction!();
                 });
+                widget.rememberMeAction!();
               },
             ),
           ),
           const Text(
             'Remember me',
-            style: kLabelStyle,
+            style: EntryViewStyles.kLabelStyle,
           ),
         ],
       ),
@@ -231,7 +227,7 @@ class _EntryViewState extends State<EntryView> {
         const SizedBox(height: 20.0),
         Text(
           "${widget.title} with",
-          style: kLabelStyle,
+          style: EntryViewStyles.kLabelStyle,
         ),
       ],
     );
@@ -312,8 +308,6 @@ class _EntryViewState extends State<EntryView> {
     );
   }
 
-
-
   Widget _mainBuilder() {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
@@ -322,22 +316,9 @@ class _EntryViewState extends State<EntryView> {
         child: Stack(
           children: <Widget>[
             Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFF73AEF5),
-                    Color(0xFF61A4F1),
-                    Color(0xFF478DE0),
-                    Color(0xFF398AE5),
-                  ],
-                  stops: [0.1, 0.4, 0.7, 0.9],
-                ),
-              ),
-            ),
+                height: double.infinity,
+                width: double.infinity,
+                decoration: EntryViewStyles.mainBoxStyle),
             SizedBox(
               height: double.infinity,
               child: SingleChildScrollView(

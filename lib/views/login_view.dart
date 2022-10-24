@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:notepad/views/register_view.dart';
-import 'package:notepad/views/route_animation.dart';
+import 'package:notepad/animations/route_animation.dart';
 import '../firebase_options.dart';
 import '../utilities/debug_print.dart';
 import 'entry_view.dart';
@@ -69,7 +69,7 @@ class _LoginViewState extends State<LoginView> {
                 fotterAction: (context) {
                   Navigator.push(
                     context,
-                    routeAnimation((context) => const RegisterView()),
+                    routeAnimation(const RegisterView()),
                   );
                 },
                 facebookAction: (context) {},

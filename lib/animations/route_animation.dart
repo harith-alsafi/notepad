@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 
-Route routeAnimation(Widget Function(BuildContext context) page) {
+Route routeAnimation(Widget page) {
   return PageRouteBuilder(
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
     return SharedAxisTransition(
@@ -12,6 +12,6 @@ Route routeAnimation(Widget Function(BuildContext context) page) {
       child: child,
     );
   }, pageBuilder: (context, animation, secondaryAnimation) {
-    return page(context);
+    return page;
   });
 }
