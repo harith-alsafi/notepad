@@ -24,18 +24,19 @@ class _LoginViewState extends State<LoginView> {
   /// Initialise late variables
   @override
   void initState() {
-    super.initState();
     _initFireBase = initFireBase();
+    super.initState();
   }
 
   Future<FirebaseApp> initFireBase() async {
     if (kDebugMode) {
       await Future.delayed(const Duration(seconds: 2)); //recommend
-      Logger.cyan.log("Debug: finished loading _HomePageState.initFireBase()");
     }
-    return Firebase.initializeApp(
+    return await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
-    );
+    ).whenComplete(() {
+      Logger.cyan.log("Debug: finished loading _HomePageState.initFireBase()");
+    });
   }
 
   @override
@@ -43,8 +44,8 @@ class _LoginViewState extends State<LoginView> {
     return FutureBuilder(
         future: _initFireBase,
         builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (!snapshot.hasError) {
               return EntryView(
                 title: "Sign In",
                 showNameField: false,
@@ -62,8 +63,11 @@ class _LoginViewState extends State<LoginView> {
                     final currentUser = FirebaseAuth.instance.currentUser;
                     await currentUser?.sendEmailVerification();
                     Logger.green.log("Successfully logined user: $currentUser");
-                  } on Exception catch (e) {
-                    Logger.red.log("Error occured: $e");
+                  } on FirebaseAuthException catch (e) {
+                    // user not found
+                    if (e.code == 'user-not-found') {
+                    } else if (e.code == 'wrong-password') {}
+                    Logger.red.log("Error occured: ${e.message}");
                   }
                 },
                 fotterAction: (context) {
@@ -75,10 +79,13 @@ class _LoginViewState extends State<LoginView> {
                 facebookAction: (context) {},
                 googleAction: (context) {},
               );
-            default:
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+            } else {
+              return Text("Error occured ${snapshot.error}");
+            }
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
         });
   }

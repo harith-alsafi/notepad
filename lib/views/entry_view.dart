@@ -281,28 +281,31 @@ class _EntryViewState extends State<EntryView> {
   }
 
   Widget _buildSignupBtn() {
-    return GestureDetector(
-      onTap: () => widget.fotterAction(context),
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: widget.fotterText,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w400,
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => widget.fotterAction(context),
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: widget.fotterText,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
-            ),
-            TextSpan(
-              text: widget.fotterActionText,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
+              TextSpan(
+                text: widget.fotterActionText,
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -316,45 +319,47 @@ class _EntryViewState extends State<EntryView> {
         child: Stack(
           children: <Widget>[
             Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: EntryViewStyles.mainBoxStyle),
-            SizedBox(
+              alignment: Alignment.center,
               height: double.infinity,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40.0,
-                  vertical: 120.0,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'OpenSans',
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
+              decoration: EntryViewStyles.mainBoxStyle,
+              child: SizedBox(
+                height: double.infinity,
+                width: 600,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 50,
+                    vertical: 120.0,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'OpenSans',
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    if (widget.showNameField) const SizedBox(height: 30.0),
-                    if (widget.showNameField) _buildNameTF(),
-                    const SizedBox(height: 30.0),
-                    _buildEmailTF(),
-                    const SizedBox(height: 30.0),
-                    _buildPasswordTF(),
-                    if (widget.showForgetPassword) _buildForgotPasswordBtn(),
-                    if (widget.showRememberMe) _buildRememberMeCheckbox(),
-                    _buildLoginBtn(),
-                    _buildSignInWithText(),
-                    _buildSocialBtnRow(),
-                    _buildSignupBtn(),
-                  ],
+                      if (widget.showNameField) const SizedBox(height: 30.0),
+                      if (widget.showNameField) _buildNameTF(),
+                      const SizedBox(height: 30.0),
+                      _buildEmailTF(),
+                      const SizedBox(height: 30.0),
+                      _buildPasswordTF(),
+                      if (widget.showForgetPassword) _buildForgotPasswordBtn(),
+                      if (widget.showRememberMe) _buildRememberMeCheckbox(),
+                      _buildLoginBtn(),
+                      _buildSignInWithText(),
+                      _buildSocialBtnRow(),
+                      _buildSignupBtn(),
+                    ],
+                  ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

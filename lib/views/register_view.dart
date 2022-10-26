@@ -31,8 +31,12 @@ class _RegisterViewState extends State<RegisterView> {
           await currentUser?.updateDisplayName(name);
           await currentUser?.sendEmailVerification();
           Logger.green.log("Successfully logined user: $currentUser");
-        } on Exception catch (e) {
-          Logger.red.log("Error occured: $e");
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            Logger.red.log("Weak password: ${e.code}");
+          } else if (e.code == 'email-already-in-use') {
+            Logger.red.log("Already used: ${e.code}");
+          }
         }
       },
       fotterAction: (context) {
