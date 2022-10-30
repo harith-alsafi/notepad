@@ -80,7 +80,8 @@ class _LoginViewState extends State<LoginView> {
                 googleAction: (context) {},
               );
             } else {
-              return Text("Error occured ${snapshot.error}");
+              return Text("Error occured ${snapshot.error}",
+                  style: TextStyle(fontSize: 18.0));
             }
           } else {
             return const Center(

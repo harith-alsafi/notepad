@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../themes/decorations.dart';
+import 'custom_widgets.dart';
 
 class EntryView extends StatefulWidget {
   final String title;
@@ -191,24 +192,12 @@ class _EntryViewState extends State<EntryView> {
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: ElevatedButton(
-          style: const ButtonStyle(
-              backgroundColor:
-                  MaterialStatePropertyAll(Color.fromARGB(255, 152, 202, 255))),
-          onPressed: () async {
+        child: CustomWidgets.entryButton(
+          widget.loginButtonText,
+          onTap: () async {
             await widget.loginButtonAction(context, _email.text, _password.text,
                 name: _name.text);
           },
-          child: Text(
-            widget.loginButtonText,
-            style: const TextStyle(
-              color: Color.fromARGB(255, 61, 93, 128),
-              letterSpacing: 1.5,
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'OpenSans',
-            ),
-          ),
         ),
       ),
     );
@@ -311,57 +300,29 @@ class _EntryViewState extends State<EntryView> {
     );
   }
 
-  Widget _mainBuilder() {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Stack(
-          children: <Widget>[
-            Container(
-              alignment: Alignment.center,
-              height: double.infinity,
-              decoration: EntryViewStyles.mainBoxStyle,
-              child: SizedBox(
-                height: double.infinity,
-                width: 600,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 50,
-                    vertical: 120.0,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.title,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'OpenSans',
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (widget.showNameField) const SizedBox(height: 30.0),
-                      if (widget.showNameField) _buildNameTF(),
-                      const SizedBox(height: 30.0),
-                      _buildEmailTF(),
-                      const SizedBox(height: 30.0),
-                      _buildPasswordTF(),
-                      if (widget.showForgetPassword) _buildForgotPasswordBtn(),
-                      if (widget.showRememberMe) _buildRememberMeCheckbox(),
-                      _buildLoginBtn(),
-                      _buildSignInWithText(),
-                      _buildSocialBtnRow(),
-                      _buildSignupBtn(),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+  Widget _buildMain() {
+    return CustomWidgets.entryBackGround(
+      context,
+      width: 600,
+      horizantalPadding: 50,
+      verticalPadding: 90,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CustomWidgets.titleText(widget.title),
+          if (widget.showNameField) const SizedBox(height: 30.0),
+          if (widget.showNameField) _buildNameTF(),
+          const SizedBox(height: 30.0),
+          _buildEmailTF(),
+          const SizedBox(height: 30.0),
+          _buildPasswordTF(),
+          if (widget.showForgetPassword) _buildForgotPasswordBtn(),
+          if (widget.showRememberMe) _buildRememberMeCheckbox(),
+          _buildLoginBtn(),
+          _buildSignInWithText(),
+          _buildSocialBtnRow(),
+          _buildSignupBtn(),
+        ],
       ),
     );
   }
@@ -369,7 +330,7 @@ class _EntryViewState extends State<EntryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _mainBuilder(),
+      body: _buildMain(),
     );
   }
 }

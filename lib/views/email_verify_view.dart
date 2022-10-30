@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:notepad/utilities/debug_print.dart';
+import 'package:notepad/views/custom_widgets.dart';
 
 import '../themes/decorations.dart';
 
@@ -46,43 +47,13 @@ class _EmailVerifyViewState extends State<EmailVerifyView> {
     );
   }
 
-  Widget _buildFotterAction() {
-    return Column(
-      children: [
-        const Text(
-          "Didn't receive an email? Please check your spam folder or",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18.0,
-            fontWeight: FontWeight.normal,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: GestureDetector(
-            child: const Text(
-              "Click Here to recieve one again",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onTap: () {},
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildFotterText() {
     return RichText(
       textAlign: TextAlign.center,
       text: const TextSpan(
         children: [
           TextSpan(
-            text: "We have sent a verification email to\n",
+            text: "Please verify using the link we sent to\n",
             style: TextStyle(
               color: Colors.white,
               fontSize: 18.0,
@@ -90,18 +61,11 @@ class _EmailVerifyViewState extends State<EmailVerifyView> {
             ),
           ),
           TextSpan(
-            text: "harith.alsafi@gmail.com\n",
+            text: "harith.alsafi@gmail.com",
             style: TextStyle(
               color: Colors.white,
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
-            ),
-          ),
-          TextSpan(
-            text: "Please click the link we have sent you to verify",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18.0,
             ),
           ),
         ],
@@ -109,46 +73,57 @@ class _EmailVerifyViewState extends State<EmailVerifyView> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                height: double.infinity,
-                width: double.infinity,
-                decoration: EntryViewStyles.mainBoxStyle,
-                child: SizedBox(
-                  height: double.infinity,
-                  width: 600,
-                  child: SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 180.0,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _buildTitle(),
-                        _buildMailLogo(),
-                        _buildFotterText(),
-                        const SizedBox(height: 30.0),
-                        _buildFotterAction()
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+  Widget _buildFotterAction() {
+    return const Text(
+      "Didn't receive an email? Please check your spam folder or",
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 18.0,
+        fontWeight: FontWeight.normal,
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget _buildSendAgainButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 85,
+          vertical: 5,
+        ),
+        child: CustomWidgets.entryButton(
+          "SEND AGAIN",
+          onTap: () => {},
         ),
       ),
     );
+  }
+
+  Widget _buildMain() {
+    return CustomWidgets.entryBackGround(
+      context,
+      width: 600,
+      horizantalPadding: 40,
+      verticalPadding: 180,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildTitle(),
+          const SizedBox(height: 5.0),
+          _buildMailLogo(),
+          _buildFotterText(),
+          const SizedBox(height: 10.0),
+          _buildFotterAction(),
+          _buildSendAgainButton()
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: _buildMain());
   }
 }

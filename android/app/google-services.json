@@ -29,6 +29,13 @@
             {
               "client_id": "154371019608-7vqml70lm4srjg21sdqud3fkbe9b088s.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "154371019608-bksgh9ocmn0chfc6l5qkplm4qkajq61p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "alsafi.harith.notepad"
+              }
             }
           ]
         }
