@@ -36,6 +36,8 @@ class _RegisterViewState extends State<RegisterView> {
             Logger.red.log("Weak password: ${e.code}");
           } else if (e.code == 'email-already-in-use') {
             Logger.red.log("Already used: ${e.code}");
+          } else if (e.code == 'invalid-email') {
+            Logger.red.log("Invalid email: ${e.code}");
           }
         }
       },

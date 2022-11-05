@@ -9,12 +9,12 @@ class ErrorView extends StatelessWidget {
 
   Widget _buildErrorLogo() {
     return Container(
-      height: 240.0,
+      height: 180.0,
       width: 240.0,
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage(
-            'assets/logos/mail.png',
+            'assets/logos/error.png',
           ),
         ),
       ),
@@ -39,7 +39,7 @@ class ErrorView extends StatelessWidget {
       body: CustomWidgets.entryBackGround(
         context,
         width: 600,
-        verticalPadding: MediaQuery.of(context).size.height * 0.35,
+        verticalPadding: MediaQuery.of(context).size.height * 0.25,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
