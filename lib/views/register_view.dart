@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notepad/views/entry_view.dart';
+import '../animations/route_animation.dart';
 import '../utilities/debug_print.dart';
+import 'email_verify_view.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -31,6 +33,17 @@ class _RegisterViewState extends State<RegisterView> {
           await currentUser?.updateDisplayName(name);
           await currentUser?.sendEmailVerification();
           Logger.green.log("Successfully logined user: $currentUser");
+          if (!context.mounted) {
+            return;
+          }
+          Navigator.push(
+            context,
+            routeAnimation(
+              EmailVerifyView(
+                email: email,
+              ),
+            ),
+          );
         } on FirebaseAuthException catch (e) {
           if (e.code == 'weak-password') {
             Logger.red.log("Weak password: ${e.code}");

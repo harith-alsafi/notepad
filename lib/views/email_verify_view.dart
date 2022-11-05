@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -7,13 +9,15 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:notepad/utilities/debug_print.dart';
 import 'package:notepad/views/custom_widgets.dart';
+import 'package:notepad/views/error_view.dart';
 
+import '../animations/route_animation.dart';
 import '../themes/decorations.dart';
 
 class EmailVerifyView extends StatefulWidget {
-  const EmailVerifyView({super.key});
+  const EmailVerifyView({super.key, required this.email});
 
-  // final String Link;
+  final String email;
   // final void Function(BuildContext context) OnClick;
 
   @override
@@ -21,6 +25,9 @@ class EmailVerifyView extends StatefulWidget {
 }
 
 class _EmailVerifyViewState extends State<EmailVerifyView> {
+  bool sendAgain = true;
+  bool timerOn = false;
+
   Widget _buildMailLogo() {
     return Container(
       height: 240.0,
@@ -50,9 +57,9 @@ class _EmailVerifyViewState extends State<EmailVerifyView> {
   Widget _buildFotterText() {
     return RichText(
       textAlign: TextAlign.center,
-      text: const TextSpan(
+      text: TextSpan(
         children: [
-          TextSpan(
+          const TextSpan(
             text: "Please verify using the link we sent to\n",
             style: TextStyle(
               color: Colors.white,
@@ -61,8 +68,8 @@ class _EmailVerifyViewState extends State<EmailVerifyView> {
             ),
           ),
           TextSpan(
-            text: "harith.alsafi@gmail.com",
-            style: TextStyle(
+            text: widget.email,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
@@ -95,13 +102,44 @@ class _EmailVerifyViewState extends State<EmailVerifyView> {
         ),
         child: CustomWidgets.entryButton(
           "SEND AGAIN",
-          onTap: () => {},
+          onTap: sendAgain
+              ? () async {
+                  Logger.blue.log("Initiating timer");
+                  await FirebaseAuth.instance.currentUser
+                      ?.sendEmailVerification();
+                  setState(() {
+                    sendAgain = false;
+                  });
+                  Timer(const Duration(minutes: 3), () {
+                    setState(() {
+                      sendAgain = true;
+                    });
+                    Logger.blue.log("Can send again");
+                  });
+                }
+              : null,
         ),
       ),
     );
   }
 
   Widget _buildMain() {
+    Timer.periodic(
+      const Duration(seconds: 10),
+      (timer) {
+        if (FirebaseAuth.instance.currentUser?.emailVerified ?? false) {
+          Logger.green.log("User verified");
+          FirebaseAuth.instance.currentUser?.reload();
+          Navigator.push(
+            context,
+            routeAnimation(
+              const ErrorView(),
+            ),
+          );
+          timer.cancel();
+        }
+      },
+    );
     return CustomWidgets.entryBackGround(
       context,
       width: 600,

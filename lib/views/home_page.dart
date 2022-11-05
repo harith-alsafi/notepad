@@ -31,18 +31,19 @@ class HomePage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (!snapshot.hasError) {
-            if (FirebaseAuth.instance.currentUser == null) {
-              return const LoginView();
-            }
+            // if (FirebaseAuth.instance.currentUser == null) {
+            return const LoginView();
+            // }
           } else {
             return ErrorView(
               errorMessage: snapshot.error.toString(),
             );
           }
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         }
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
       },
     );
   }
