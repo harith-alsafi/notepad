@@ -22,7 +22,7 @@ class LoginView extends StatelessWidget {
       title: "Sign In",
       showNameField: false,
       showForgetPassword: true,
-      showRememberMe: true,
+      showRememberMe: false,
       loginButtonText: 'LOGIN',
       fotterText: "Don't have an account? ",
       fotterActionText: "Sign Up",
@@ -46,12 +46,8 @@ class LoginView extends StatelessWidget {
               ),
             ),
           );
-        } on FirebaseAuthException catch (e) {
-          // user not found
-          // TODO: handle errors
-          if (e.code == 'user-not-found') {
-          } else if (e.code == 'wrong-password') {}
-          Logger.red.log("Error occured: ${e.message}");
+        } on FirebaseAuthException {
+          rethrow;
         }
       },
       fotterAction: (context) {

@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../themes/decorations.dart';
+import '../utilities/debug_print.dart';
 import 'custom_widgets.dart';
 
 class EntryView extends StatefulWidget {
@@ -48,6 +50,7 @@ class _EntryViewState extends State<EntryView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   late final TextEditingController _name;
+  String? _error;
   bool _rememberMe = false;
   bool _passwordHidden = true;
 
@@ -186,17 +189,54 @@ class _EntryViewState extends State<EntryView> {
     );
   }
 
+  Widget _buildErrorMessage() {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        children: [
+          const WidgetSpan(
+            child: Icon(
+              Icons.error_outline,
+              size: 22,
+            ),
+          ),
+          TextSpan(
+            text: _error != null ? " ${_error!}" : "",
+            style: const TextStyle(
+              color: Color.fromARGB(255, 255, 109, 109),
+              fontSize: 19.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildLoginBtn() {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 25.0),
+      padding: (widget.showRememberMe | widget.showNameField)
+          ? const EdgeInsets.symmetric(vertical: 25.0)
+          : null,
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: CustomWidgets.entryButton(
           widget.loginButtonText,
           onTap: () async {
-            await widget.loginButtonAction(context, _email.text, _password.text,
-                name: _name.text);
+            try {
+              await widget.loginButtonAction(
+                  context, _email.text, _password.text,
+                  name: _name.text);
+              setState(() {
+                _error = null;
+              });
+            } on FirebaseAuthException catch (e) {
+              setState(() {
+                _error = e.message;
+              });
+              Logger.red.log("Error occured: ${e.message}");
+            }
           },
         ),
       ),
@@ -318,6 +358,7 @@ class _EntryViewState extends State<EntryView> {
           _buildPasswordTF(),
           if (widget.showForgetPassword) _buildForgotPasswordBtn(),
           if (widget.showRememberMe) _buildRememberMeCheckbox(),
+          if (_error != null) _buildErrorMessage(),
           _buildLoginBtn(),
           _buildSignInWithText(),
           _buildSocialBtnRow(),
