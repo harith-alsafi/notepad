@@ -131,7 +131,7 @@ class _EmailVerifyViewState extends State<EmailVerifyView> {
         if (FirebaseAuth.instance.currentUser?.emailVerified ?? false) {
           Logger.green.log("User verified");
           FirebaseAuth.instance.currentUser?.reload();
-          Navigator.push(context, routeAnimation(MainView()));
+          Navigator.push(context, routeAnimation(const MainView()));
           timer.cancel();
         } else if (!timer.isActive) {
           Navigator.push(
