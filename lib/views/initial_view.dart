@@ -5,15 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:notepad/views/login_view.dart';
+import 'package:notepad/views/notes_view.dart';
 
 import '../firebase_options.dart';
 import '../utilities/debug_print.dart';
 import 'error_view.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class InitialView extends StatelessWidget {
+  const InitialView({super.key});
 
-  Future<FirebaseApp> initFireBase() async {
+  static Future<FirebaseApp> initFireBase() async {
     if (kDebugMode) {
       await Future.delayed(const Duration(seconds: 2)); //recommend
     }
@@ -31,9 +32,11 @@ class HomePage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (!snapshot.hasError) {
-            // if (FirebaseAuth.instance.currentUser == null) {
-            return const LoginView();
-            // }
+            if (FirebaseAuth.instance.currentUser == null) {
+              return const LoginView();
+            } else {
+              return const NotesView();
+            }
           } else {
             return ErrorView(
               errorMessage: snapshot.error.toString(),

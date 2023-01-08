@@ -360,8 +360,9 @@ class _EntryViewState extends State<EntryView> {
           if (widget.showRememberMe) _buildRememberMeCheckbox(),
           if (_error != null) _buildErrorMessage(),
           _buildLoginBtn(),
-          _buildSignInWithText(),
-          _buildSocialBtnRow(),
+          // TODO: finish google / facebook sign up
+          // _buildSignInWithText(),
+          // _buildSocialBtnRow(),
           _buildSignupBtn(),
         ],
       ),
