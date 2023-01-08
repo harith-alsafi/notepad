@@ -10,6 +10,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:notepad/utilities/debug_print.dart';
 import 'package:notepad/views/custom_widgets.dart';
 import 'package:notepad/views/error_view.dart';
+import 'package:notepad/views/main_view.dart';
 
 import '../animations/route_animation.dart';
 import '../themes/decorations.dart';
@@ -130,13 +131,15 @@ class _EmailVerifyViewState extends State<EmailVerifyView> {
         if (FirebaseAuth.instance.currentUser?.emailVerified ?? false) {
           Logger.green.log("User verified");
           FirebaseAuth.instance.currentUser?.reload();
+          Navigator.push(context, routeAnimation(MainView()));
+          timer.cancel();
+        } else if (!timer.isActive) {
           Navigator.push(
             context,
             routeAnimation(
               const ErrorView(),
             ),
           );
-          timer.cancel();
         }
       },
     );

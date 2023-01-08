@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:notepad/views/login_view.dart';
+import 'package:notepad/views/main_view.dart';
 import 'package:notepad/views/notes_view.dart';
 
 import '../firebase_options.dart';
@@ -35,7 +36,7 @@ class InitialView extends StatelessWidget {
             if (FirebaseAuth.instance.currentUser == null) {
               return const LoginView();
             } else {
-              return const NotesView();
+              return const MainView();
             }
           } else {
             return ErrorView(
